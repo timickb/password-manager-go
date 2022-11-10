@@ -2,11 +2,12 @@ package api_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 
+	"github.com/timickb/password-manager/internal/common"
 	"github.com/timickb/password-manager/internal/config"
 	"github.com/timickb/password-manager/internal/crypto"
-	"github.com/timickb/password-manager/internal/errors"
 	"github.com/timickb/password-manager/internal/installer"
 	"github.com/timickb/password-manager/internal/store/memory"
 	"github.com/timickb/password-manager/pkg/api"
@@ -119,7 +120,7 @@ func TestReadDoesNotExist(t *testing.T) {
 	}
 
 	_, err = pm.Read(&ctx, "key")
-	if _, ok := err.(errors.ErrNoSuchKey); !ok {
+	if !errors.Is(err, common.ErrNoSuchKey) {
 		t.Fatalf("wrong error type")
 	}
 }
@@ -180,7 +181,7 @@ func TestDeleteDoesNotExist(t *testing.T) {
 	}
 
 	err = pm.Delete(&ctx, "key")
-	if _, ok := err.(errors.ErrNoSuchKey); !ok {
+	if !errors.Is(err, common.ErrNoSuchKey) {
 		t.Fatalf("wrong error type")
 	}
 }

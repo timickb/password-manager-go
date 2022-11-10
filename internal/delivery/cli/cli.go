@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/timickb/password-manager/internal/errors"
+	"github.com/timickb/password-manager/internal/common"
 	"github.com/timickb/password-manager/internal/installer"
 	"github.com/timickb/password-manager/pkg/api"
 )
@@ -60,12 +60,12 @@ func (c *PasswordManagerCLI) CmdList() []string {
 func (c *PasswordManagerCLI) Execute(cmd string, args ...string) error {
 	if _, ok := c.commands[cmd]; !ok {
 		fmt.Println(commandNotFound)
-		return errors.ErrCmdNotFound{}
+		return common.ErrCmdNotFound
 	}
 
 	if requiredArgs := c.commands[cmd].ArgsCount; requiredArgs > len(args) {
 		fmt.Println(c.commands[cmd].Usage)
-		return errors.ErrCmdWrongUsage{}
+		return common.ErrCmdWrongUsage
 	}
 
 	switch cmd {

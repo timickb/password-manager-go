@@ -2,12 +2,13 @@ package cli_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 
+	"github.com/timickb/password-manager/internal/common"
 	"github.com/timickb/password-manager/internal/config"
 	"github.com/timickb/password-manager/internal/crypto"
 	"github.com/timickb/password-manager/internal/delivery/cli"
-	"github.com/timickb/password-manager/internal/errors"
 	"github.com/timickb/password-manager/internal/installer"
 	"github.com/timickb/password-manager/internal/store/memory"
 	"github.com/timickb/password-manager/pkg/api"
@@ -60,7 +61,7 @@ func TestExecuteWrongCmd(t *testing.T) {
 	}
 
 	err = cli.Execute("unexpected_command")
-	if _, ok := err.(errors.ErrCmdNotFound); !ok {
+	if !errors.Is(err, common.ErrCmdNotFound) {
 		t.Fatalf("wrong error type")
 	}
 }
@@ -105,7 +106,7 @@ func TestExecute(t *testing.T) {
 
 	// get wrong usage case
 	err = cli.Execute("get")
-	if _, ok := err.(errors.ErrCmdWrongUsage); !ok {
+	if !errors.Is(err, common.ErrCmdWrongUsage) {
 		t.Fatalf("wrong error type")
 	}
 
@@ -116,13 +117,13 @@ func TestExecute(t *testing.T) {
 
 	// set wrong usage case 1
 	err = cli.Execute("set", "secret_name")
-	if _, ok := err.(errors.ErrCmdWrongUsage); !ok {
+	if !errors.Is(err, common.ErrCmdWrongUsage) {
 		t.Fatalf("wrong error type")
 	}
 
 	// set wrong usage case 2
 	err = cli.Execute("set")
-	if _, ok := err.(errors.ErrCmdWrongUsage); !ok {
+	if !errors.Is(err, common.ErrCmdWrongUsage) {
 		t.Fatalf("wrong error type")
 	}
 
@@ -133,7 +134,7 @@ func TestExecute(t *testing.T) {
 
 	// delete wrong usage case 1
 	err = cli.Execute("delete")
-	if _, ok := err.(errors.ErrCmdWrongUsage); !ok {
+	if !errors.Is(err, common.ErrCmdWrongUsage) {
 		t.Fatalf("wrong error type")
 	}
 }

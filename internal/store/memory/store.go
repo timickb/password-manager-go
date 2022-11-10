@@ -3,7 +3,7 @@ package memory
 import (
 	"context"
 
-	"github.com/timickb/password-manager/internal/errors"
+	"github.com/timickb/password-manager/internal/common"
 )
 
 type Store struct {
@@ -21,7 +21,7 @@ func (s *Store) Open(ctx *context.Context) error {
 
 func (s *Store) Close(ctx *context.Context) error {
 	if s.data == nil {
-		return errors.ErrStoreNotOpened{}
+		return common.ErrStoreNotOpened
 	}
 	return nil
 }
@@ -35,7 +35,7 @@ func (s *Store) GetItem(ctx *context.Context, key string) (string, error) {
 	if val, ok := s.data[key]; ok {
 		return val, nil
 	}
-	return "", errors.ErrNoSuchKey{}
+	return "", common.ErrNoSuchKey
 }
 
 func (s *Store) RemoveItem(ctx *context.Context, key string) error {
@@ -43,5 +43,5 @@ func (s *Store) RemoveItem(ctx *context.Context, key string) error {
 		delete(s.data, key)
 		return nil
 	}
-	return errors.ErrNoSuchKey{}
+	return common.ErrNoSuchKey
 }

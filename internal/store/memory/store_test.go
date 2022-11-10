@@ -2,9 +2,10 @@ package memory_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 
-	"github.com/timickb/password-manager/internal/errors"
+	"github.com/timickb/password-manager/internal/common"
 	"github.com/timickb/password-manager/internal/store/memory"
 )
 
@@ -44,7 +45,7 @@ func TestCloseNotOpened(t *testing.T) {
 	if err == nil {
 		t.Fatalf("error expected")
 	}
-	if _, ok := err.(errors.ErrStoreNotOpened); !ok {
+	if !errors.Is(err, common.ErrStoreNotOpened) {
 		t.Fatalf("wrong error type")
 	}
 }
@@ -101,7 +102,7 @@ func TestRemoveItem(t *testing.T) {
 		t.Fatalf("error expected")
 	}
 
-	if _, ok := err.(errors.ErrNoSuchKey); !ok {
+	if !errors.Is(err, common.ErrNoSuchKey) {
 		t.Fatalf("wrong error type")
 	}
 }
